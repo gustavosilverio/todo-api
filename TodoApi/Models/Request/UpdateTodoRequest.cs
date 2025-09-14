@@ -1,0 +1,12 @@
+﻿using System.Text.Json.Serialization;
+
+namespace TodoApi.Models.Request
+{
+    public class UpdateTodoRequest
+    {
+        [JsonIgnore]
+        public int Id { get; set; }
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+    }
+}

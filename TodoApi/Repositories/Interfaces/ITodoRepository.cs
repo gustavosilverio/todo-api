@@ -5,7 +5,11 @@ namespace TodoApi.Repositories.Interfaces
 {
     public interface ITodoRepository
     {
-        Task Salvar(TodoRequest todo);
-        public Task<List<Todo>> GetAll();
+        Task Create(CreateTodoRequest todo);
+        Task<List<Todo>> GetAll();
+        Task<Todo> GetById(int id);
+        Task UpdateIsDone(int idTodo, bool isDone);
+        Task Update(UpdateTodoRequest todo);
+        Task Delete(int id);
     }
 }

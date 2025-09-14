@@ -1,11 +1,8 @@
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using TodoApi.Repositories;
-using TodoApi.Repositories.Interfaces;
-using TodoApi.Services;
-using TodoApi.Services.Interfaces;
+using TodoApi.Config;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -18,20 +15,18 @@ builder.Services.AddSwaggerGen(c =>
     //c.MapType<ProblemDetails>(() => new() { Type = "object" });
 });
 
-builder.Services.AddScoped<ITodoService, TodoService>();
-builder.Services.AddScoped<ITodoRepository, TodoRepository>();
+builder.Services.ConfigureCors();
+builder.Services.AddDependencyInjection();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Warning()
+    .CreateLogger();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
