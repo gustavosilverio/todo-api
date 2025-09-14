@@ -1,0 +1,16 @@
+name: todo-api
+
+services:
+  api:
+    image: ghcr.io/gustavosilverio/todo-api:latest
+    container_name: todo-api
+    restart: unless-stopped
+    ports:
+      - 32774:8080
+      - 32775:8081
+    networks:
+      - global-sqlserver
+
+networks:
+  global-sqlserver:
+    external: true
