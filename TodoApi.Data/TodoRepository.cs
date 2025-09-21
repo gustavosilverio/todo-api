@@ -1,10 +1,11 @@
-﻿using PetaPoco.SqlKata;
+﻿using Microsoft.Extensions.Configuration;
+using PetaPoco.SqlKata;
 using SqlKata;
 using TodoApi.Models;
 using TodoApi.Models.Request;
-using TodoApi.Repositories.Interfaces;
+using TodoApi.Data.Interfaces;
 
-namespace TodoApi.Repositories
+namespace TodoApi.Data
 {
     public class TodoRepository(IConfiguration config) : BaseRepository(config), ITodoRepository
     {

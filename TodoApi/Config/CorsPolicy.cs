@@ -1,8 +1,8 @@
 ﻿namespace TodoApi.Config
 {
-    public static class CorsPolicy
+    internal static class CorsPolicy
     {
-        public static IServiceCollection ConfigureCors(this IServiceCollection services)
+        internal static IServiceCollection ConfigureCors(this IServiceCollection services)
         {
             services.AddCors(options =>
             {

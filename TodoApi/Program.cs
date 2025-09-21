@@ -6,19 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    //c.IncludeXmlComments(xmlPath);
-
-    //c.MapType<ProblemDetails>(() => new() { Type = "object" });
-});
 
 builder.Services.ConfigureCors();
 builder.Services.AddDependencyInjection();
+builder.Services.AddSwaggerGenWithAuth();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthenticationConfiguration(builder.Configuration);
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
@@ -41,6 +37,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

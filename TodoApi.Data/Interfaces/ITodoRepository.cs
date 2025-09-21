@@ -1,7 +1,7 @@
 ﻿using TodoApi.Models;
 using TodoApi.Models.Request;
 
-namespace TodoApi.Repositories.Interfaces
+namespace TodoApi.Data.Interfaces
 {
     public interface ITodoRepository
     {

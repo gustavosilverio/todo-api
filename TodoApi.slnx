@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="TodoApi.Data/TodoApi.Data.csproj" Id="fd34ecc3-4a10-42bf-841c-2c6c4f71a8bc" />
+  <Project Path="TodoApi.Model/TodoApi.Model.csproj" Id="3a3dcf0c-cf3e-441a-87d8-bfa81942be2e" />
+  <Project Path="TodoApi.Service/TodoApi.Service.csproj" Id="2f96121c-7b10-4210-9272-011678da32c6" />
   <Project Path="TodoApi/TodoApi.csproj" />
 </Solution>

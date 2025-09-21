@@ -1,6 +1,7 @@
-﻿using PetaPoco;
+﻿using Microsoft.Extensions.Configuration;
+using PetaPoco;
 
-namespace TodoApi.Repositories
+namespace TodoApi.Data
 {
     public class BaseRepository
     {
