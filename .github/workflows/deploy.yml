@@ -6,8 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  REPOSITORY_NAME: ${{ github.repository }}
-  PROJECT_NAME: todo-api
+  IMAGE_TAG: latest
 
 jobs:
   build-and-push:
@@ -37,25 +36,20 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}:${{ github.sha }}
+          tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}:${{ env.IMAGE_TAG }}
 
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
-
+  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set REPOSITORY_NAME to env
-        run: echo "REPOSITORY_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-
-      - name: Deploy to Hostinger
-        uses: hostinger/deploy-on-vps@v1
-        with:
-          api-key: ${{ secrets.HOSTINGER_API_KEY }}
-          virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
-          project-name: ${{ env.PROJECT_NAME }}
-          environment-variables: |
-            IMAGE_NAME=${{ env.REPOSITORY_NAME }}
-            IMAGE_TAG=${{ github.sha }}
+      - name: Send update request to Hostinger API
+        run: |
+          curl --request POST \
+            --url "https://developers.hostinger.com/api/vps/v1/virtual-machines/${{ vars.HOSTINGER_VPS_ID }}/docker/${{ vars.HOSTINGER_PROJECT_NAME }}/update" \
+            --header "Authorization: Bearer ${{ secrets.HOSTINGER_API_KEY }}" \
+            --header "Content-Type: application/json" \
+            --fail
