@@ -7,6 +7,7 @@ on:
 env:
   REGISTRY: ghcr.io
   REPOSITORY_NAME: ${{ github.repository }}
+  PROJECT_NAME: todo-api
 
 jobs:
   build-and-push:
@@ -54,7 +55,7 @@ jobs:
         with:
           api-key: ${{ secrets.HOSTINGER_API_KEY }}
           virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
-          project-name: ${{ env.REPOSITORY_NAME }}
+          project-name: ${{ env.PROJECT_NAME }}
           environment-variables: |
             IMAGE_NAME=${{ env.REPOSITORY_NAME }}
             IMAGE_TAG=${{ github.sha }}
