@@ -4,6 +4,8 @@ using TodoApi.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.AddSerilogConfig();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -16,11 +18,9 @@ builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthenticationConfiguration(builder.Configuration);
 
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Warning()
-    .CreateLogger();
-
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
@@ -43,5 +43,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+Log.Information("application starting...");
 
 app.Run();
