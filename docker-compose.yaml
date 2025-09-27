@@ -2,8 +2,7 @@ name: todo-api
 
 services:
   api:
-    build: .
-    image: ghcr.io/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }}
+    image: ghcr.io/gustavosilverio/todo-api:latest
     container_name: todo-api
     restart: unless-stopped
     ports:
