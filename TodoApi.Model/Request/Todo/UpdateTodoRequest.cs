@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace TodoApi.Models.Request
+namespace TodoApi.Model.Request.Todo
 {
     public class UpdateTodoRequest
     {

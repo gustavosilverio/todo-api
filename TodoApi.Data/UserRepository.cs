@@ -2,8 +2,8 @@
 using PetaPoco.SqlKata;
 using SqlKata;
 using TodoApi.Models;
-using TodoApi.Models.Request;
 using TodoApi.Data.Interfaces;
+using TodoApi.Model.Request.User;
 
 namespace TodoApi.Data
 {
@@ -18,6 +18,14 @@ namespace TodoApi.Data
         {
             var query = new Query("User")
                 .Where("Id", id).ToSql();
+
+            return await db.FirstOrDefaultAsync<User>(query);
+        }
+
+        public async Task<User> GetByEmail(string email)
+        {
+            var query = new Query("User")
+                .Where("Email", email).ToSql();
 
             return await db.FirstOrDefaultAsync<User>(query);
         }

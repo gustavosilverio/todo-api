@@ -12,5 +12,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\TodoApi.Data\TodoApi.Data.csproj" />
 	  <ProjectReference Include="..\TodoApi.Model\TodoApi.Model.csproj" />
+	  <ProjectReference Include="..\TodoApi.Util\TodoApi.Util.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
-﻿using TodoApi.Models;
-using TodoApi.Models.Request;
+﻿using TodoApi.Model.Request.Todo;
+using TodoApi.Models;
 
 namespace TodoApi.Services.Interfaces
 {

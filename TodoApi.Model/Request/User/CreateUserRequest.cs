@@ -1,4 +1,4 @@
-﻿namespace TodoApi.Models.Request
+﻿namespace TodoApi.Model.Request.User
 {
     public class CreateUserRequest
     {

@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using TodoApi.Model.Request.Todo;
 using TodoApi.Models;
-using TodoApi.Models.Request;
 using TodoApi.Services.Interfaces;
 
 namespace TodoApi.Controllers
@@ -13,6 +14,7 @@ namespace TodoApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTodoRequest todo)
         {
             await todoService.Create(todo);
@@ -22,6 +24,7 @@ namespace TodoApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Todo>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var todos = await todoService.GetAll();
@@ -31,6 +34,7 @@ namespace TodoApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Todo))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPatch("{idTodo}")]
+        [Authorize]
         public async Task<IActionResult> UpdateIsDone([FromRoute] int idTodo, [FromQuery] bool isDone)
         {
             var todo = await todoService.UpdateIsDone(idTodo, isDone);
@@ -40,6 +44,7 @@ namespace TodoApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Todo))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{idTodo}")]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute] int idTodo, [FromBody] UpdateTodoRequest todo)
         {
             todo.Id = idTodo;

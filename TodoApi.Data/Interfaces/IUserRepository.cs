@@ -1,5 +1,5 @@
-﻿using TodoApi.Models;
-using TodoApi.Models.Request;
+﻿using TodoApi.Model.Request.User;
+using TodoApi.Models;
 
 namespace TodoApi.Data.Interfaces
 {
@@ -7,5 +7,6 @@ namespace TodoApi.Data.Interfaces
     {
         Task Create(CreateUserRequest user);
         Task<User> GetById(int id);
+        Task<User> GetByEmail(string email);
     }
 }

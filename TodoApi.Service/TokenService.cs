@@ -4,10 +4,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using TodoApi.Models;
+using TodoApi.Service.Interfaces;
 
 namespace TodoApi.Services
 {
-    internal sealed class TokenService(IConfiguration config)
+    internal sealed class TokenService(IConfiguration config) : ITokenService
     {
         public string CreateToken(User user)
         {
@@ -26,6 +27,8 @@ namespace TodoApi.Services
                 ]),
                 Expires = DateTime.Now.AddMinutes(config.GetValue<int>("Jwt:ExpirationInMinutes")),
                 SigningCredentials = credentials,
+                Issuer = config["Jwt:Issuer"],
+                Audience = config["Jwt:Audience"],
             };
 
             var handler = new JsonWebTokenHandler();

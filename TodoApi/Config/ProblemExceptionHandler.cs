@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using System.Net;
 using TodoApi.Models.Response;
+using TodoApi.Util.Exceptions;
 
 namespace TodoApi.Config
 {
@@ -16,6 +17,12 @@ namespace TodoApi.Config
 
                 switch (exception)
                 {
+                    case ResponseException responseException:
+                        statusCode = StatusCodes.Status400BadRequest;
+                        response = new(HttpStatusCode.BadRequest, null, responseException.Error);
+                        logger.LogError(responseException, "Response exception error: {Error}", responseException.Error);
+                        break;
+
                     case SqlException sqlException:
                         statusCode = StatusCodes.Status500InternalServerError;
                         response = new(HttpStatusCode.InternalServerError, null, "Intern server error.");

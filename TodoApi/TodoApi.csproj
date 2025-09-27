@@ -19,5 +19,8 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\TodoApi.Model\TodoApi.Model.csproj" />
 	  <ProjectReference Include="..\TodoApi.Service\TodoApi.Service.csproj" />
+	  <ProjectReference Include="..\TodoApi.Util\TodoApi.Util.csproj" />
 	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://www.schemastore.org/bpkg.json" /></VisualStudio></ProjectExtensions>
 </Project>

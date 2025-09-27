@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Models.Request;
+using System.Net;
+using TodoApi.Config;
+using TodoApi.Model.Request.User;
 using TodoApi.Services.Interfaces;
 
 namespace TodoApi.Controllers
@@ -38,7 +40,7 @@ namespace TodoApi.Controllers
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var user = await userService.GetById(id);
-            return Ok(user);
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.OK, user);
         }
     }
 }
