@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
+        c.HeadContent = "<h1>Test</h1>";
         c.ConfigObject.Filter = string.Empty;
         c.EnableFilter();
         c.DisplayRequestDuration();
