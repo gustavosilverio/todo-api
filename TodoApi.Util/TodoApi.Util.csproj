@@ -10,4 +10,12 @@
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TodoApi.Model\TodoApi.Model.csproj" />
+  </ItemGroup>
+
 </Project>

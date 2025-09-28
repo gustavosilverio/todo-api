@@ -1,6 +1,9 @@
-﻿using System.Reflection;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Reflection;
 using TodoApi.Data;
+using TodoApi.Models;
 using TodoApi.Services;
+using TodoApi.Util;
 
 namespace TodoApi.Config
 {
@@ -10,6 +13,8 @@ namespace TodoApi.Config
         {
             ConfigureServices(services);
             ConfigureRepositories(services);
+            ConfigureUtils(services);
+            ConfigureExternalDependencies(services);
 
             return services;
         }
@@ -58,6 +63,34 @@ namespace TodoApi.Config
 
                 services.AddTransient(interfaceType, implementation);
             }
+        }
+
+        internal static void ConfigureUtils(IServiceCollection services)
+        {
+            // Get all interfaces in the assembly of the specified class
+            var interfaces = Assembly.GetAssembly(typeof(PasswordHash))!.GetTypes()
+                .Where(r => r.IsInterface)
+                .ToList();
+
+            // For each interface, find its implementation and register it in the DI container
+            // In the filter, we exclude interfaces and abstract classes
+            foreach (Type interfaceType in interfaces)
+            {
+                var implementation = Assembly.GetAssembly(typeof(PasswordHash))!.GetTypes()
+                    .Where(r => interfaceType.IsAssignableFrom(r) && !r.IsInterface && !r.IsAbstract)
+                    .ToList()
+                    .FirstOrDefault();
+
+                if (implementation is null)
+                    throw new ArgumentException(RetrieveMessageErrorNotImplemented(interfaceType.Name, Assembly.GetAssembly(typeof(PasswordHash))!.FullName!.Split(',')[0]), nameof(implementation));
+
+                services.AddTransient(interfaceType, implementation);
+            }
+        }
+
+        internal static void ConfigureExternalDependencies(IServiceCollection services)
+        {
+            services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
         }
 
         /// <summary>
