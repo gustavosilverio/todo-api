@@ -6,8 +6,8 @@ services:
     container_name: todo-api
     restart: unless-stopped
     ports:
-      - 32774:8080
-      - 32775:8081
+      - 127.0.0.1:32774:8080
+      - 127.0.0.1:32775:8081
     networks:
       - global-sqlserver
 
