@@ -1,9 +1,10 @@
 ﻿using TodoApi.Model.Request.Auth;
+using TodoApi.Model.Response;
 
 namespace TodoApi.Service.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> Login(LoginAuthRequest request);
+        Task<LoginResponse> Login(LoginAuthRequest request);
     }
 }

@@ -11,6 +11,9 @@ namespace TodoApi.Controllers
     [Route("todo")]
     public class TodoController(ITodoService todoService) : ControllerBase
     {
+        /// <summary>
+        /// Create a to-do
+        /// </summary>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
@@ -21,6 +24,10 @@ namespace TodoApi.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Get all to-dos
+        /// </summary>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Todo>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
@@ -31,6 +38,12 @@ namespace TodoApi.Controllers
             return Ok(todos);
         }
 
+        /// <summary>
+        /// Update the IsDone field
+        /// </summary>
+        /// <param name="idTodo">The id of the to-do</param>
+        /// <param name="isDone">If it is done or not</param>
+        /// <returns>The updated to-do</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Todo))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPatch("{idTodo}")]
@@ -41,6 +54,12 @@ namespace TodoApi.Controllers
             return Ok(todo);
         }
 
+        /// <summary>
+        /// Update the to-do
+        /// </summary>
+        /// <param name="idTodo">The id of the to-do</param>
+        /// <param name="todo">The to-do object</param>
+        /// <returns>The updated to-do</returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Todo))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{idTodo}")]
@@ -53,6 +72,10 @@ namespace TodoApi.Controllers
             return Ok(updatedTodo);
         }
 
+        /// <summary>
+        /// Delete a to-do
+        /// </summary>
+        /// <param name="idTodo">The if of the to-do</param>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Todo))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{idTodo}")]

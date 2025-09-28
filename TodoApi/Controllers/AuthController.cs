@@ -10,13 +10,18 @@ namespace TodoApi.Controllers
     [Route("auth")]
     public class AuthController(IAuthService authService)
     {
+        /// <summary>
+        /// Log the user
+        /// </summary>
+        /// <param name="request">The login request params</param>
+        /// <returns>The token if user params are valid</returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginAuthRequest request)
         {
-            var token = await authService.Login(request);
-            return ConfigureResponse.GenerateResponse(HttpStatusCode.OK, token);
+            var response = await authService.Login(request);
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.OK, response);
         }
     }
 }
