@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using TodoApi.Config;
 using TodoApi.Model.Request.User;
+using TodoApi.Models;
 using TodoApi.Services.Interfaces;
 
 namespace TodoApi.Controllers
@@ -28,12 +29,26 @@ namespace TodoApi.Controllers
         }
 
         /// <summary>
+        /// Get all the users
+        /// </summary>
+        /// <returns>A list of users</returns>
+        [ProducesResponseType(typeof(List<User>), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await userService.GetAll();
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.OK, users);
+        }
+
+        /// <summary>
         /// Retrieves the user with the specified unique identifier.
         /// </summary>
         /// <param name="id">The unique identifier of the user to retrieve.</param>
         /// <returns>An <see cref="IActionResult"/> containing the user data if found; otherwise, a response with status code 204
         /// (No Content) if the user does not exist or 400 (Bad Request) if the request is invalid.</returns>
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
         [Authorize]

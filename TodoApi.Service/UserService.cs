@@ -24,6 +24,7 @@ namespace TodoApi.Services
 
             await userRepository.Create(user);
         }
+        public async Task<List<User>> GetAll() => await userRepository.GetAll();
         public async Task<User> GetById(int id) => await userRepository.GetById(id);
     }
 }
