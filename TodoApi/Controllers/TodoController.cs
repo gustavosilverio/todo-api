@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using TodoApi.Config;
 using TodoApi.Model.Request.Todo;
 using TodoApi.Models;
 using TodoApi.Services.Interfaces;
@@ -21,7 +23,7 @@ namespace TodoApi.Controllers
         public async Task<IActionResult> Create([FromBody] CreateTodoRequest todo)
         {
             await todoService.Create(todo);
-            return NoContent();
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.NoContent, null);
         }
 
         /// <summary>
@@ -35,7 +37,22 @@ namespace TodoApi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var todos = await todoService.GetAll();
-            return Ok(todos);
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.OK, todos);
+        }
+
+        /// <summary>
+        /// Get to-dos by provided user id
+        /// </summary>
+        /// <param name="userId">The user id</param>
+        /// <returns>A list of to-dos</returns>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Todo>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("get-by-user-id")]
+        [Authorize]
+        public async Task<IActionResult> GetByUserId([FromQuery] int userId)
+        {
+            var todos = await todoService.GetByUserId(userId);
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.OK, todos);
         }
 
         /// <summary>
@@ -51,7 +68,7 @@ namespace TodoApi.Controllers
         public async Task<IActionResult> UpdateIsDone([FromRoute] int idTodo, [FromQuery] bool isDone)
         {
             var todo = await todoService.UpdateIsDone(idTodo, isDone);
-            return Ok(todo);
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.OK, todo);
         }
 
         /// <summary>
@@ -69,7 +86,7 @@ namespace TodoApi.Controllers
             todo.Id = idTodo;
 
             var updatedTodo = await todoService.Update(todo);
-            return Ok(updatedTodo);
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.OK, updatedTodo);
         }
 
         /// <summary>
@@ -82,7 +99,7 @@ namespace TodoApi.Controllers
         public async Task<IActionResult> Delete([FromRoute] int idTodo)
         {
             await todoService.Delete(idTodo);
-            return NoContent();
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.NoContent, null);
         }
     }
 }

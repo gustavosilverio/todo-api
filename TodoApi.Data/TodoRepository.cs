@@ -21,6 +21,14 @@ namespace TodoApi.Data
             return await db.FetchAsync<Todo>(query);
         }
 
+        public async Task<List<Todo>> GetByUserId(int userId)
+        {
+            var query = new Query("Todo")
+                .Where("UserId", userId).ToSql();
+
+            return await db.FetchAsync<Todo>(query);
+        }
+
         public async Task<Todo> GetById(int id)
         {
             var query = new Query("Todo")

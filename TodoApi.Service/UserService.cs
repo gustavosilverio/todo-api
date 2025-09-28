@@ -1,4 +1,6 @@
-﻿using TodoApi.Data.Interfaces;
+﻿using System.Collections.Generic;
+using TodoApi.Data.Interfaces;
+using TodoApi.Model.DTO;
 using TodoApi.Model.Request.User;
 using TodoApi.Models;
 using TodoApi.Services.Interfaces;
@@ -24,7 +26,26 @@ namespace TodoApi.Services
 
             await userRepository.Create(user);
         }
-        public async Task<List<User>> GetAll() => await userRepository.GetAll();
+        public async Task<List<SafeUserDTO>> GetAll()
+        {
+            var users = await userRepository.GetAll();
+
+            List<SafeUserDTO> safeUsers = new();
+
+            foreach(var user in users)
+            {
+                SafeUserDTO safeUser = new()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                };
+
+                safeUsers.Add(safeUser);
+            }
+
+            return safeUsers;
+        }
         public async Task<User> GetById(int id) => await userRepository.GetById(id);
     }
 }

@@ -2,6 +2,7 @@
 using TodoApi.Data.Interfaces;
 using TodoApi.Services.Interfaces;
 using TodoApi.Model.Request.Todo;
+using TodoApi.Util.Exceptions;
 
 namespace TodoApi.Services
 {
@@ -10,6 +11,14 @@ namespace TodoApi.Services
         public async Task Create(CreateTodoRequest todo) => await todoRepository.Create(todo);
 
         public async Task<List<Todo>> GetAll() => await todoRepository.GetAll();
+
+        public async Task<List<Todo>> GetByUserId(int userId)
+        {
+            if (userId == 0)
+                throw new ResponseException("User id not provided");
+
+            return await todoRepository.GetByUserId(userId);
+        }
 
         public async Task<Todo> GetById(int id) => await todoRepository.GetById(id);
 

@@ -25,7 +25,7 @@ namespace TodoApi.Controllers
         public async Task<IActionResult> Create([FromBody] CreateUserRequest user)
         {
             await userService.Create(user);
-            return NoContent();
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.NoContent, null);
         }
 
         /// <summary>

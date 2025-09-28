@@ -7,6 +7,7 @@ namespace TodoApi.Services.Interfaces
     {
         Task Create(CreateTodoRequest todo);
         Task<List<Todo>> GetAll();
+        Task<List<Todo>> GetByUserId(int userId);
         Task<Todo> GetById(int id);
         Task<Todo> UpdateIsDone(int idTodo, bool isDone);
         Task<Todo> Update(UpdateTodoRequest todo);

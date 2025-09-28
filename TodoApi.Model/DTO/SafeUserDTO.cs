@@ -1,6 +1,6 @@
 ﻿namespace TodoApi.Model.DTO
 {
-    public class LoginUserDTO
+    public class SafeUserDTO
     {
         public required int Id { get; set; }
         public required string Name { get; set; }
