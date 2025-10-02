@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using TodoApi.Data.Interfaces;
+﻿using TodoApi.Data.Interfaces;
 using TodoApi.Model.DTO;
 using TodoApi.Model.Request.User;
 using TodoApi.Models;
-using TodoApi.Services.Interfaces;
+using TodoApi.Service.Interfaces;
 using TodoApi.Util.Exceptions;
 using TodoApi.Util.Interfaces;
 
-namespace TodoApi.Services
+namespace TodoApi.Service
 {
     public class UserService(IUserRepository userRepository, IPasswordHash passwordHash) : IUserService
     {
@@ -26,6 +25,17 @@ namespace TodoApi.Services
 
             await userRepository.Create(user);
         }
+
+        public async Task Delete(int id)
+        {
+          var user = await GetById(id);
+          
+          if (user is null)
+              throw new ResponseException("User not found");
+          
+          await userRepository.Delete(id);
+        }
+        
         public async Task<List<SafeUserDTO>> GetAll()
         {
             var users = await userRepository.GetAll();

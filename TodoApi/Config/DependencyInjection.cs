@@ -2,7 +2,7 @@
 using System.Reflection;
 using TodoApi.Data;
 using TodoApi.Models;
-using TodoApi.Services;
+using TodoApi.Service;
 using TodoApi.Util;
 
 namespace TodoApi.Config

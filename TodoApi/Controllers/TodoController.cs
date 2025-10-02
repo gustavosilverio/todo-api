@@ -4,7 +4,7 @@ using System.Net;
 using TodoApi.Config;
 using TodoApi.Model.Request.Todo;
 using TodoApi.Models;
-using TodoApi.Services.Interfaces;
+using TodoApi.Service.Interfaces;
 
 namespace TodoApi.Controllers
 {

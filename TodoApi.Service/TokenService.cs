@@ -6,7 +6,7 @@ using System.Text;
 using TodoApi.Models;
 using TodoApi.Service.Interfaces;
 
-namespace TodoApi.Services
+namespace TodoApi.Service
 {
     internal sealed class TokenService(IConfiguration config) : ITokenService
     {

@@ -1,10 +1,10 @@
 ﻿using TodoApi.Models;
 using TodoApi.Data.Interfaces;
-using TodoApi.Services.Interfaces;
+using TodoApi.Service.Interfaces;
 using TodoApi.Model.Request.Todo;
 using TodoApi.Util.Exceptions;
 
-namespace TodoApi.Services
+namespace TodoApi.Service
 {
     public class TodoService(ITodoRepository todoRepository) : ITodoService
     {

@@ -4,7 +4,7 @@ using System.Net;
 using TodoApi.Config;
 using TodoApi.Model.Request.User;
 using TodoApi.Models;
-using TodoApi.Services.Interfaces;
+using TodoApi.Service.Interfaces;
 
 namespace TodoApi.Controllers
 {
@@ -29,6 +29,19 @@ namespace TodoApi.Controllers
         }
 
         /// <summary>
+        /// Delete the user by the provided id
+        /// </summary>
+        /// <param name="id">The id of the user</param>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            await userService.Delete(id);
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.NoContent);
+        }
+        
+        /// <summary>
         /// Get all the users
         /// </summary>
         /// <returns>A list of users</returns>
@@ -50,7 +63,7 @@ namespace TodoApi.Controllers
         /// (No Content) if the user does not exist or 400 (Bad Request) if the request is invalid.</returns>
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [Authorize]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
