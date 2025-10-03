@@ -14,6 +14,11 @@ namespace TodoApi.Data
             await db.InsertAsync("User", user);
         }
 
+        public void Update(User user)
+        {
+            db.Update("User", "Id", user);
+        }
+        
         public async Task Delete(int id)
         {
             var query = new Query("User")

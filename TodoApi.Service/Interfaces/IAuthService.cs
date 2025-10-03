@@ -6,5 +6,6 @@ namespace TodoApi.Service.Interfaces
     public interface IAuthService
     {
         Task<LoginResponse> Login(LoginAuthRequest request);
+        Task<LoginResponse> RefreshToken(RefreshTokenRequest request);
     }
 }
