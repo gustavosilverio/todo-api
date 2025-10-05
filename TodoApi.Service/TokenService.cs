@@ -29,12 +29,12 @@ namespace TodoApi.Service
                     new (JwtRegisteredClaimNames.Email, user.Email),
                     new (JwtRegisteredClaimNames.Name, user.Name),
                 ]),
-                Expires = DateTime.Now.AddMinutes(config.GetValue<int>("Jwt:ExpirationInMinutes")),
+                Expires = DateTime.UtcNow.AddMinutes(config.GetValue<int>("Jwt:AccessTokenExpirationInMinutes")),
                 SigningCredentials = credentials,
                 Issuer = config["Jwt:Issuer"],
                 Audience = config["Jwt:Audience"],
             };
-
+            
             var handler = new JsonWebTokenHandler();
 
             string token = handler.CreateToken(tokenDescriptor);
@@ -42,13 +42,17 @@ namespace TodoApi.Service
             return token;
         }
 
-        public string GenerateRefreshToken()
+        public (string refreshToken, DateTime refreshTokenExpiryTime) CreateRefreshToken()
         {
             var randomNumber = new Byte[32];
 
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
+
+            var refreshToken = Convert.ToBase64String(randomNumber);
+            var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(int.Parse(config["Jwt:RefreshTokenExpirationInDays"]!));
+
+            return (refreshToken, refreshTokenExpiryTime);
         }
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -56,9 +60,10 @@ namespace TodoApi.Service
             var tokenValidationParameters = new TokenValidationParameters()
             {
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:SecretKey"]!)),
-                ValidIssuer = config["Jwt:Issuer"],
-                ValidAudience = config["Jwt:Audience"],
-                ClockSkew = TimeSpan.Zero,
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateLifetime = false,
+                ValidateIssuerSigningKey = true,
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

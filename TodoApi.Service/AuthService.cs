@@ -1,5 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.JsonWebTokens;
+using System.Security.Claims;
 using TodoApi.Data.Interfaces;
 using TodoApi.Model.Request.Auth;
 using TodoApi.Model.Response;
@@ -13,10 +13,10 @@ namespace TodoApi.Service
     {
         public async Task<LoginResponse> Login(LoginAuthRequest request)
         {
-            if (request.Email.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(request.Email))
                 throw new ResponseException("Email not provided");
 
-            if (request.Password.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(request.Password))
                 throw new ResponseException("Password not provided");
 
             var user = await userRepository.GetByEmail(request.Email) ?? throw new ResponseException("User not found");
@@ -25,12 +25,13 @@ namespace TodoApi.Service
                 throw new ResponseException("Invalid password");
 
             var accessToken = tokenService.CreateToken(user);
-            var refreshToken = tokenService.GenerateRefreshToken();
+            var (refreshToken, refreshTokenExpiryTime) = tokenService.CreateRefreshToken();
             
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-            
-            userRepository.Update(user);
+            user.RefreshTokenExpiryTime = refreshTokenExpiryTime;
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await userRepository.Update(user);
 
             return new()
             {
@@ -48,21 +49,28 @@ namespace TodoApi.Service
         public async Task<LoginResponse> RefreshToken(RefreshTokenRequest request)
         {
             var principal = tokenService.GetPrincipalFromExpiredToken(request.AccessToken);
-            var userId = Int32.Parse(principal.Claims.Where(c => c.Type == JwtRegisteredClaimNames.Sub).FirstOrDefault()?.Value);
+
+            var userId = int.Parse(principal.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+
+            if (userId == 0)
+                throw new ResponseException("Invalid token");
 
             var user = await userRepository.GetById(userId);
 
             if (user is null || user.RefreshToken != request.RefreshToken ||
                 user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
-                throw new ResponseException("Invalid cliente request");
+                throw new ResponseException("Invalid request");
             }
 
             var newAccessToken = tokenService.CreateToken(user);
-            var newRefreshToken = tokenService.GenerateRefreshToken();
+            var (newRefreshToken, refreshTokenExpiryTime) = tokenService.CreateRefreshToken();
             
             user.RefreshToken = newRefreshToken;
-            userRepository.Update(user);
+            user.RefreshTokenExpiryTime = refreshTokenExpiryTime;
+            user.UpdatedAt = DateTime.UtcNow;
+            
+            await userRepository.Update(user);
 
             return new LoginResponse()
             {
@@ -76,5 +84,14 @@ namespace TodoApi.Service
                 RefreshToken = newRefreshToken
             };
         }
+
+        public async Task Revoke(int userId)
+        {
+            var _ = await userRepository.GetById(userId) ?? throw new ResponseException("User not found");
+            
+            await userRepository.RevokeUser(userId);
+        }
+
+        public void RevokeAll() => userRepository.RevokeAllUser();
     }
 }

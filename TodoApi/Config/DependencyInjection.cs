@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 using TodoApi.Data;
+using TodoApi.Model;
 using TodoApi.Models;
 using TodoApi.Service;
 using TodoApi.Util;
@@ -91,6 +92,7 @@ namespace TodoApi.Config
         internal static void ConfigureExternalDependencies(IServiceCollection services)
         {
             services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddTransient<UserClaimsInfo>();
         }
 
         /// <summary>

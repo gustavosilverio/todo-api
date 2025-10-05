@@ -14,11 +14,36 @@ namespace TodoApi.Data
             await db.InsertAsync("User", user);
         }
 
-        public void Update(User user)
+        public async Task Update(User user)
         {
-            db.Update("User", "Id", user);
+            await db.UpdateAsync("User", "Id", user);
         }
-        
+
+        public async Task RevokeUser(int userId)
+        {
+            var query = new Query("User")
+                .Where("Id", userId)
+                .AsUpdate(new Dictionary<string, object>
+                {
+                    { "RefreshToken", null },
+                    { "RefreshTokenExpiryTime", null },
+                    { "UpdatedAt", DateTime.UtcNow }
+                }).ToSql();
+            await db.ExecuteAsync(query);
+        }
+
+        public async Task RevokeAllUser()
+        {
+            var query = new Query("User")
+                .AsUpdate(new Dictionary<string, object>
+                {
+                    { "RefreshToken", null },
+                    { "RefreshTokenExpiryTime", null },
+                    { "UpdatedAt", DateTime.UtcNow }
+                }).ToSql();
+            await db.ExecuteAsync(query);
+        }
+
         public async Task Delete(int id)
         {
             var query = new Query("User")

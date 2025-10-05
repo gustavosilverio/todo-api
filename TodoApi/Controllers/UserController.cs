@@ -14,7 +14,7 @@ namespace TodoApi.Controllers
     {
 
         /// <summary>
-        /// Creates a new user with the specified details.
+        /// Creates a new user.
         /// </summary>
         /// <param name="user">The user information to create. The request body must contain all required user fields. Cannot be null.</param>
         /// <returns>A response with status code 204 (No Content) if the user is created successfully; otherwise, a 400 (Bad
@@ -26,6 +26,26 @@ namespace TodoApi.Controllers
         {
             await userService.Create(user);
             return ConfigureResponse.GenerateResponse(HttpStatusCode.NoContent, null);
+        }
+
+        /// <summary>
+        /// Updates the user with the specified identifier.
+        /// </summary>
+        /// <remarks>This method requires a valid user ID and a complete update request. The user
+        /// information is replaced with the data provided in <paramref name="request"/>. Ensure that all required
+        /// fields are present in the request object.</remarks>
+        /// <param name="id">The unique identifier of the user to update. Must be a valid user ID.</param>
+        /// <param name="request">An object containing the updated user information. Cannot be null.</param>
+        /// <returns>The updated user</returns>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateUserRequest request)
+        {
+            request.Id = id;
+
+            var updatedUser = await userService.Update(request);
+            return ConfigureResponse.GenerateResponse(HttpStatusCode.OK, updatedUser);
         }
 
         /// <summary>

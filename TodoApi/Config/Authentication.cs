@@ -10,6 +10,9 @@ namespace TodoApi.Config
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
             {
+                o.MapInboundClaims = false;
+                o.RequireHttpsMetadata = false;
+                o.SaveToken = true;
                 o.TokenValidationParameters = new TokenValidationParameters
                 {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:SecretKey"]!)),

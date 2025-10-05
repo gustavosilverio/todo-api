@@ -7,5 +7,7 @@ namespace TodoApi.Service.Interfaces
     {
         Task<LoginResponse> Login(LoginAuthRequest request);
         Task<LoginResponse> RefreshToken(RefreshTokenRequest request);
+        Task Revoke(int userId);
+        void RevokeAll();
     }
 }
