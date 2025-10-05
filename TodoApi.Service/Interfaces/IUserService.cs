@@ -7,6 +7,7 @@ namespace TodoApi.Service.Interfaces
     public interface IUserService
     {
         Task Create(CreateUserRequest user);
+        Task<SafeUserDTO> Update(UpdateUserRequest request);
         Task Delete(int id);
         Task<List<SafeUserDTO>> GetAll();
         Task<User> GetById(int id);

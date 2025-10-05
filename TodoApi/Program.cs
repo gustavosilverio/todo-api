@@ -1,8 +1,13 @@
+using Microsoft.IdentityModel.JsonWebTokens;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.IdentityModel.Tokens.Jwt;
 using TodoApi.Config;
 
 var builder = WebApplication.CreateBuilder(args);
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 builder.Host.AddSerilogConfig();
 
@@ -12,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureCors();
 builder.Services.AddDependencyInjection();
 builder.Services.AddSwaggerGenWithAuth();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
 

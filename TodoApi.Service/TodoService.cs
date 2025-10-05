@@ -6,9 +6,14 @@ using TodoApi.Util.Exceptions;
 
 namespace TodoApi.Service
 {
-    public class TodoService(ITodoRepository todoRepository) : ITodoService
+    public class TodoService(ITodoRepository todoRepository, IUserService userService) : ITodoService
     {
-        public async Task Create(CreateTodoRequest todo) => await todoRepository.Create(todo);
+        public async Task Create(CreateTodoRequest todo)
+        {
+            var _ = await userService.GetById(todo.UserId) ?? throw new ResponseException("User not found");
+
+            await todoRepository.Create(todo);
+        }
 
         public async Task<List<Todo>> GetAll() => await todoRepository.GetAll();
 

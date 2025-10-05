@@ -13,29 +13,6 @@ namespace TodoApi.Data
         {
             await db.InsertAsync("Todo", todo);
         }
-
-        public async Task<List<Todo>> GetAll()
-        {
-            var query = new Query("Todo").ToSql();
-
-            return await db.FetchAsync<Todo>(query);
-        }
-
-        public async Task<List<Todo>> GetByUserId(int userId)
-        {
-            var query = new Query("Todo")
-                .Where("UserId", userId).ToSql();
-
-            return await db.FetchAsync<Todo>(query);
-        }
-
-        public async Task<Todo> GetById(int id)
-        {
-            var query = new Query("Todo")
-                .Where("Id", id).ToSql();
-
-            return await db.FirstOrDefaultAsync<Todo>(query);
-        }
         public async Task UpdateIsDone(int id, bool isDone)
         {
             var query = new Query("Todo")
@@ -43,11 +20,11 @@ namespace TodoApi.Data
                 .AsUpdate(new
                 {
                     IsDone = isDone,
+                    UpdatedAt = DateTime.UtcNow,
                 }).ToSql();
 
             await db.ExecuteAsync(query);
         }
-
         public async Task Update(UpdateTodoRequest todo)
         {
             var query = new Query("Todo")
@@ -56,11 +33,11 @@ namespace TodoApi.Data
                 {
                     todo.Name,
                     todo.Description,
+                    UpdatedAt = DateTime.UtcNow,
                 }).ToSql();
 
             await db.ExecuteAsync(query);
         }
-
         public async Task Delete(int id)
         {
             var query = new Query("Todo")
@@ -68,6 +45,26 @@ namespace TodoApi.Data
                 .AsDelete().ToSql();
 
             await db.ExecuteAsync(query);
+        }
+        public async Task<List<Todo>> GetAll()
+        {
+            var query = new Query("Todo").ToSql();
+
+            return await db.FetchAsync<Todo>(query);
+        }
+        public async Task<List<Todo>> GetByUserId(int userId)
+        {
+            var query = new Query("Todo")
+                .Where("UserId", userId).ToSql();
+
+            return await db.FetchAsync<Todo>(query);
+        }
+        public async Task<Todo> GetById(int id)
+        {
+            var query = new Query("Todo")
+                .Where("Id", id).ToSql();
+
+            return await db.FirstOrDefaultAsync<Todo>(query);
         }
     }
 }
