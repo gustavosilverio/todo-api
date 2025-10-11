@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using TodoApi.Config;
-using TodoApi.Data;
 using TodoApi.Model.Request.Auth;
 using TodoApi.Model.Response;
 using TodoApi.Service.Interfaces;

@@ -43,6 +43,7 @@ namespace TodoApi.Service
                 },
                 Token = accessToken,
                 RefreshToken = refreshToken,
+                RefreshTokenExpiryTime = refreshTokenExpiryTime,
             };
         }
 
@@ -81,7 +82,8 @@ namespace TodoApi.Service
                     Name = user.Name,
                 },
                 Token = newAccessToken,
-                RefreshToken = newRefreshToken
+                RefreshToken = newRefreshToken,
+                RefreshTokenExpiryTime = refreshTokenExpiryTime,
             };
         }
 

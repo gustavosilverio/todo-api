@@ -7,5 +7,6 @@ namespace TodoApi.Model.Response
         public required SafeUserDTO UserCredentials { get; set; }
         public required string Token { get; set; }
         public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
     }
 }
