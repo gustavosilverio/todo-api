@@ -6,7 +6,7 @@ namespace TodoApi.Model.Request.Todo
     {
         public required int UserId { get; set; }
         public required string Name { get; set; }
-        public required string Description { get; set; }
+        public string? Description { get; set; }
         [JsonIgnore]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [JsonIgnore]
