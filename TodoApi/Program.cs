@@ -11,7 +11,11 @@ JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 builder.Host.AddSerilogConfig();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+    });
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.ConfigureCors();

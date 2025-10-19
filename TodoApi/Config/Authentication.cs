@@ -16,6 +16,7 @@ namespace TodoApi.Config
                 o.TokenValidationParameters = new TokenValidationParameters
                 {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:SecretKey"]!)),
+                    ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
                     ValidIssuer = config["Jwt:Issuer"],
                     ValidAudience = config["Jwt:Audience"],
                     ClockSkew = TimeSpan.Zero,
