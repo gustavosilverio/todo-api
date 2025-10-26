@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using Serilog.Filters;
 
 namespace TodoApi.Config
 {
@@ -8,7 +9,11 @@ namespace TodoApi.Config
         {
             return hostBuilder.UseSerilog((context, services, configuration) =>
             {
-                configuration.ReadFrom.Configuration(context.Configuration);
+                configuration
+                    .ReadFrom.Configuration(context.Configuration)
+                    .Filter.ByExcluding(Matching.WithProperty<string>("RequestPath", path =>
+                        path.StartsWith("/jobs") || path.StartsWith("/hangfire") || path.StartsWith("/swagger")
+                    ));
             });
         }
     }

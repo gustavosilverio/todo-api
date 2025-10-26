@@ -10,15 +10,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Hangfire" Version="1.8.21" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.20" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.21" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0-preview.4" />
+		<PackageReference Include="Scrutor" Version="6.1.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\TodoApi.Jobs\TodoApi.Jobs.csproj" />
 	  <ProjectReference Include="..\TodoApi.Model\TodoApi.Model.csproj" />
 	  <ProjectReference Include="..\TodoApi.Service\TodoApi.Service.csproj" />
 	  <ProjectReference Include="..\TodoApi.Util\TodoApi.Util.csproj" />

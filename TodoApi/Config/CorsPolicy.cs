@@ -2,17 +2,35 @@
 {
     internal static class CorsPolicy
     {
-        internal static IServiceCollection ConfigureCors(this IServiceCollection services)
+        public const string Development = "Development";
+        public const string Production = "Production";
+
+        internal static IServiceCollection ConfigureCors(this IServiceCollection services, IConfiguration config)
         {
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(policy =>
+                options.AddPolicy(Development, builder =>
                 {
-                    policy.AllowAnyOrigin()
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
+                    builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+
+                options.AddPolicy(Production, builder =>
+                {
+                    var frontendUrl = config["FrontendUrl"];
+
+                    if (string.IsNullOrEmpty(frontendUrl))
+                    {
+                        throw new InvalidOperationException("FrontendUrl is not configured in appsettings.json for Production environment.");
+                    }
+
+                    builder.WithOrigins(frontendUrl)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
                 });
             });
+
             return services;
         }
     }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 using TodoApi.Data;
+using TodoApi.Jobs;
+using TodoApi.Jobs.Interfaces;
 using TodoApi.Model;
 using TodoApi.Models;
 using TodoApi.Service;
@@ -16,6 +18,7 @@ namespace TodoApi.Config
             ConfigureRepositories(services);
             ConfigureUtils(services);
             ConfigureExternalDependencies(services);
+            ConfigureHangfireJobs(services);
 
             return services;
         }
@@ -87,6 +90,16 @@ namespace TodoApi.Config
 
                 services.AddTransient(interfaceType, implementation);
             }
+        }
+
+        internal static void ConfigureHangfireJobs(IServiceCollection services)
+        {
+            services.Scan(scan => scan
+                .FromAssemblyOf<CleanTodos>()
+                .AddClasses(classes => classes.AssignableTo<IJob>())
+                .AsSelf()
+                .WithTransientLifetime()
+            );
         }
 
         internal static void ConfigureExternalDependencies(IServiceCollection services)

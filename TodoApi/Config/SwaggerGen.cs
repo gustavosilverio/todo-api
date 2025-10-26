@@ -11,9 +11,21 @@ namespace TodoApi.Config
         {
             services.AddSwaggerGen(o =>
             {
+                o.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "TodoAPI",
+                    Description = "A simple and very robust API using modern technologies.",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Gustavo Silvério",
+                        Url = new Uri("https://www.gsilverio.com/"),
+                    },
+                });
+
                 o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
 
-                var securityScheme = new OpenApiSecurityScheme
+                o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
                     Name = "JWT Authentication",
                     Description = "Enter your JWT token in this field",
@@ -21,11 +33,9 @@ namespace TodoApi.Config
                     Type = SecuritySchemeType.Http,
                     Scheme = JwtBearerDefaults.AuthenticationScheme,
                     BearerFormat = "JWT",
-                };
+                });
 
-                o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
-
-                var securityRequirement = new OpenApiSecurityRequirement
+                o.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
@@ -38,9 +48,7 @@ namespace TodoApi.Config
                         },
                         []
                     }
-                };
-
-                o.AddSecurityRequirement(securityRequirement);
+                });
                 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
