@@ -5,7 +5,7 @@ using TodoApi.Service.Interfaces;
 
 namespace TodoApi.Jobs
 {
-    [Job("0 0 * * 0", "clean-todos")]
+    [Job("0 0 * */1 *", "clean-todos")]
     public class CleanTodos(ITodoService todoService, ILogger logger) : IJob
     {
         public async Task Execute()

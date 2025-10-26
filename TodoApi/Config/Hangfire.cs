@@ -53,8 +53,8 @@ namespace TodoApi.Config
             {
                 if (job.Attribute is null)
                 {
-                    Log.Warning("Job {0} don't have Job attribute. Skipping...", job.Type.Name);
-                    continue;
+                    Log.Error("Job {0} don't have Job attribute.", job.Type.Name);
+                    throw new Exception();
                 }
 
                 jobManager.AddOrUpdate(
