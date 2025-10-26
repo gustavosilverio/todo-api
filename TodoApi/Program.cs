@@ -61,7 +61,6 @@ else
         o.DocumentTitle = "TodoAPI";
         o.ConfigObject.Filter = string.Empty;
         o.EnableFilter();
-        o.DocExpansion(DocExpansion.None);
         o.SupportedSubmitMethods();
     });
 }
