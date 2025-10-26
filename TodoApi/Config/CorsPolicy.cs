@@ -2,33 +2,37 @@
 {
     internal static class CorsPolicy
     {
-        public const string Development = "Development";
-        public const string Production = "Production";
+        public const string Default = "DefaultCorsPolicy";
 
-        internal static IServiceCollection ConfigureCors(this IServiceCollection services, IConfiguration config)
+        internal static IServiceCollection ConfigureCors(this IServiceCollection services, IConfiguration config, IWebHostEnvironment environment)
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(Development, builder =>
+                if (environment.IsProduction())
                 {
-                    builder.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
-                });
-
-                options.AddPolicy(Production, builder =>
-                {
-                    var frontendUrl = config["FrontendUrl"];
-
-                    if (string.IsNullOrEmpty(frontendUrl))
+                    options.AddPolicy(Default, builder =>
                     {
-                        throw new InvalidOperationException("FrontendUrl is not configured in appsettings.json for Production environment.");
-                    }
+                        var frontendUrl = config["FrontendUrl"];
 
-                    builder.WithOrigins(frontendUrl)
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-                });
+                        if (string.IsNullOrEmpty(frontendUrl))
+                        {
+                            throw new InvalidOperationException("FrontendUrl is not configured in appsettings.json for Production environment.");
+                        }
+
+                        builder.WithOrigins(frontendUrl)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+                }
+                else
+                {
+                    options.AddPolicy(Default, builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                              .AllowAnyMethod()
+                              .AllowAnyHeader();
+                    });
+                }
             });
 
             return services;

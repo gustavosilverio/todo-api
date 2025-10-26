@@ -18,7 +18,7 @@ builder.Services.AddControllers()
     });
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.ConfigureCors(builder.Configuration);
+builder.Services.ConfigureCors(builder.Configuration, builder.Environment);
 builder.Services.AddDependencyInjection();
 builder.Services.AddSwaggerGenWithAuth();
 builder.Services.AddHttpContextAccessor();
@@ -43,8 +43,6 @@ app.UseSwagger();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseCors(CorsPolicy.Development);
-
     app.AddHangfireDashboard();
 
     app.UseSwaggerUI(o =>
@@ -58,8 +56,6 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseCors(CorsPolicy.Production);
-
     app.UseSwaggerUI(o =>
     {
         o.DocumentTitle = "TodoAPI";
@@ -69,6 +65,8 @@ else
         o.SupportedSubmitMethods();
     });
 }
+
+app.UseCors(CorsPolicy.Default);
 
 app.UseHttpsRedirection();
 
