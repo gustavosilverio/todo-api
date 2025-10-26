@@ -10,6 +10,7 @@ Technologies used here:
 - SQLKata
 - SQL Server
 - Newtonsoft.Json
+- Hangfire
 - Docker
 
 
